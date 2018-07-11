@@ -1,0 +1,43 @@
+<html>
+
+<header>
+    <title>Village</title>
+    <!-- Jquery -->
+    <script type="text/javascript" src="lib/jquery-1-11-2-min.js"> </script>
+    <!-- Bootrap -->
+    <script type="text/javascript" src="lib/bootstrap-min.js"> </script>
+    <script type="text/javascript" src="lib/mdb-min.js"> </script>
+    <style type="text/css">
+        #container {
+          max-width: 800px;
+          height:1200px;
+          margin: auto;
+        }
+        #graph-container {
+          max-width: 800px;
+          height: 400px;
+        }
+      </style>
+</header>
+
+<body>
+    <div id="container"> 
+
+    <p>This is a simple webpage</p>
+    <canvas id="myCanvas" style="max-width: 800px; height: 300px;"></canvas>
+    </div>
+</body>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#F400F0";
+        ctx.fillRect(75,0,25,155);
+        ctx.fillRect(0,75,75,5);
+        ctx.fillRect(175,0,25,65);
+        ctx.fillRect(175,65,100,5);
+        ctx.fillRect(175,85,100,5);
+        ctx.fillRect(175,85,25,155);
+
+        
+    </script>
+</html>

@@ -5,6 +5,7 @@
 #define FYELLOW  14
 #define BGREEN   0x0020
 #define BRED     0x0040
+#define BGREY  135
 
 #ifndef LOGGER_H_
 #define LOGGER_H_

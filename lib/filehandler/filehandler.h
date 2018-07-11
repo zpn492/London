@@ -38,6 +38,8 @@ namespace filehandler
 	
 	extern void replace(std::string &s, char before, char after);
 
+    extern std::string space(std::string s, int space);
+
     /* This methods creates .js file
      * this file is ready to be integrated with boostrap: https://mdbootstrap.com/javascript/charts/ 
      * Format: 

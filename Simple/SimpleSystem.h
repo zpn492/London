@@ -10,5 +10,7 @@
 #include <cerrno>
 #include <sstream>
 #include <thread>
+#include <time.h>
+#include <unistd.h>
 
 #endif

@@ -150,6 +150,14 @@ void filehandler::replace(std::string &s, char before, char after)
 	std::replace(s.begin(), s.end(), before, after);
 	};
 
+std::string filehandler::space(std::string s, int space)
+        {
+        int reminder = space - s.length();
+        for (int i = 0; i < reminder; i++)
+            s += " ";
+        return s;
+        };
+
 /* Run a function with a series of input
  * For each result, store x values in a historgram or  */
 void filehandler::histogram(const char *filename, std::vector<std::string> labels, std::vector<double> dataset)

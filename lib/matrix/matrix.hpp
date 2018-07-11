@@ -4,7 +4,7 @@
 #include "../../SimpleJust.h"
 
 namespace linalg 
-    {
+    {    
     /* ******************************************************** */
     /* Exceptions */
     /* ******************************************************** */
@@ -43,8 +43,20 @@ namespace linalg
          */
         void fill(double value);
         void transpose();
-        void set_value(int row, int col, double value) throw();
+        
+        /**
+         * set or get value by row & col index
+         * Ex. 
+         * double v1[2][3] = {{2, 3, 1}, {4, -1, -2} };
+         * Matrix A(linalg::MatrixFactory<2,3>(v1));
+         * 
+         * get_value(1, 2) is refering to v1[0][1] = 3.
+         * set_value(2, 1, 2.0) is refering to v1[1][0], replacing 4 with 2.0
+         */
         double get_value(int row, int col) throw();
+        void set_value(int row, int col, double value) throw();
+        
+        
         void pretty_print();
 
         std::vector<std::vector<double> > data;
