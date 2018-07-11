@@ -1,27 +1,5 @@
 # London
-/**
-    * LONDON consists of two namespaces, London & London::View.
-    * In London you'll find som helper function and models for the game mechanics.
-    * In London::View, you'll find I/O mechanics, listing for user input & printing states of the models.
-    * Functions in London::View, ending at Loop contains listening functionality.
-    * 
-    * London
-    *  Helper functions
-    *  Class Game
-    *  Class Card
-    *  Class Player
-    *  Class Loan
-    * 
-    * London::View
-    *  View functions (without need of input)
-    *  View functions (with need of input)
- */
-
- ```c++
-// New game is initiated
-London::Game();
-```
-
+```c++
 /**
     * 2018-07-11
     * The actuacl game London.
@@ -45,3 +23,9 @@ London::Game();
     *      - (End turn) you'll get an extra card
     *  3) Interest (you get interest from your gold deposit)
 */
+```
+
+ ```c++
+// New game is initiated
+London::Game();
+```
