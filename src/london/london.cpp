@@ -1,4 +1,4 @@
-#include "blocks.hpp"
+#include "london.hpp"
 
 /* ********************************* */
 /* LONDON */
@@ -129,10 +129,11 @@ inline const char* EmptyDeck::what() const throw()
         return FALSE;
         };
     
-    void Player::takeLoan()
+    bool Player::takeLoan()
         {
         loans.push_back(Loan());
         gold += LOAN;
+        return FALSE;
         };
 
     int Player::interest()
@@ -433,7 +434,10 @@ namespace London
         bool takeLoan(Logger &log, Player &p)
             {
             p.takeLoan();
-            return FALSE;
+            log.setColor(FGREEN);
+            std::cout << "You took a loan on 10 gold, in return you'll have to return 15 gold"  << std::endl;
+            log.resetColor();
+            return TRUE;
             };
 
         bool runCity(Logger &log, Player &p)
@@ -450,7 +454,7 @@ namespace London
             else
                 {
                 log.setColor(FRED);
-                std::cout << "You have " << p.gold << " , but it cost " << p.lastSumCost;
+                std::cout << "You have " << p.gold << ", but it cost " << p.lastSumCost;
                 std::cout << " to run the city" << std::endl;
                 log.resetColor();
                 return FALSE;
@@ -470,8 +474,10 @@ namespace London
                 }
             else
                 {
+                log.setColor(FRED);
                 std::cout << "You can't afford a new district, it will cost you: ";
                 std::cout << (10 + pow(5, p.districts.size())) << " gold" << std::endl;
+                log.resetColor();
                 return FALSE;
                 }
             };

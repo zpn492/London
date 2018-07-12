@@ -17,19 +17,22 @@
 #include "lib/mortality/mortality.hpp"
 
 /* London */
-#include "src/blocks/blocks.hpp"
-
-#include "src/projecteuler/projecteuler.hpp"
+#include "src/london/london.hpp"
 
 void HTTPServer()
     {
     HTTP http; http.start(80, "127.0.0.1", "data/public_html");
+    };
+
+void london(int decksize)
+    {
+    London::Game(0, decksize);    
     };
     
 using namespace linalg;
 
 int main(int argc, char *args[])
     {   
-    London::Game();    
+    london(atoi(args[1]));
     return 0;
     };

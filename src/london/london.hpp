@@ -1,5 +1,5 @@
-#ifndef __BLOCKS__
-#define __BLOCKS__
+#ifndef __LONDON__
+#define __LONDON__
 
 #include "../../SimpleJust.h"
 
@@ -30,14 +30,6 @@ namespace London
     class Card;
     class Loan;
     class Player;
-
-    namespace View
-        {
-        struct ViewPoint { bool (*f)(Logger&, London::Player&); };        
-        static std::map<char, ViewPoint> viewpoints;
-        static std::map<char, ViewPoint>::iterator viewpointsIt;
-        
-        };
     
     /**
      * 2018-07-11
@@ -256,7 +248,7 @@ namespace London
          * Player.gold += London::LOAN;
          * Player.loans.push_back(Loan(London::LOAN_PAYBACK))
          */
-        void takeLoan();
+        bool takeLoan();
 
         /**
          * Interest is calculated & added to Player.gold
@@ -331,6 +323,10 @@ namespace London
     { 
     namespace View
         {
+        struct ViewPoint { bool (*f)(Logger&, London::Player&); };        
+        static std::map<char, ViewPoint> viewpoints;
+        static std::map<char, ViewPoint>::iterator viewpointsIt;
+
 /* PLAYER */
         bool deck(Logger &log, const std::vector<Card> &deck, 
             const std::string name);
