@@ -19,11 +19,11 @@ IF %1==lib GOTO lib
 
 :main
 ECHO Compile main
-"..\..\C++\Dev-Cpp\MinGW64\bin\g++.exe" -c "main.cpp" -o main.o -std=c++11 -m32 -I..\..\C++\Dev-Cpp\MinGW64\include" -I"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\C++\Dev-Cpp\lib\libwsock32.a"  
+"..\..\C++\Dev-Cpp\MinGW64\bin\g++.exe" -c "main.cpp" -o main.o -std=c++11 -m32 -I..\..\C++\Dev-Cpp\MinGW64\include" -I"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\C++\Dev-Cpp\lib\libwsock32.a" -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 "..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib\libbgi.a" 
 
 :: Make executeable
 ECHO Create executeable
-"..\..\C++\Dev-Cpp\MinGW64\bin\g++.exe" main.o %olib% %ofilepaths% -o "bin\SomeProg.exe" -std=c++11 -m32 -I"..\..\C++\Dev-Cpp\MinGW64\include" -I"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\C++\Dev-Cpp\lib\libwsock32.a" 
+"..\..\C++\Dev-Cpp\MinGW64\bin\g++.exe" main.o %olib% %ofilepaths% -o "bin\SomeProg.exe" -std=c++11 -m32 -I"..\..\C++\Dev-Cpp\MinGW64\include" -I"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\C++\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\C++\Dev-Cpp\lib\libwsock32.a" -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 "..\..\C++\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib\libbgi.a" 
 ECHO Ready
 GOTO end
 

@@ -22,7 +22,16 @@ namespace linalg
             for(int j = 0; j < data[i].size(); j++)
                 data[i][j] += v;
             }
-        }   
+        };
+
+    Matrix::operator%(double v)
+        {
+        for(int i = 0; i < data.size(); i++)
+            {
+            for(int j = 0; j < data[i].size(); j++)
+                data[i][j] = std::fmod(data[i][j], v);
+            }
+        };   
 
     Matrix::operator*(const Matrix &m) throw()
         {
@@ -32,7 +41,7 @@ namespace linalg
                 throw multiplication;
 
             Matrix mn(rows, m.cols);  mn.fill(0);
-            int n;
+            double n;
             
             for(int i = 0; i < rows; i++)
                 {
@@ -89,6 +98,22 @@ namespace linalg
         rows = m.rows;
         cols = m.cols;
         data = m.data;
+        };
+
+    Matrix::Matrix(std::vector<std::vector<double> > t_data)
+        {
+        rows = t_data.size();
+        cols = t_data[0].size();
+        data = t_data;
+        };
+
+    Matrix::Matrix(std::vector<std::vector<int> > t_data)
+        {
+		for(int i = 0; i < t_data.size(); i++)
+			{
+			std::vector<double> d(t_data[i].begin(), t_data[i].end());
+			data.push_back(d);
+			}
         };
 
     void Matrix::row_scalar_multiplication(int row, double value)

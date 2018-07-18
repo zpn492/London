@@ -11,6 +11,7 @@ class Node
 public:
     int x;
     int y;
+    bool traversable;
     Node(int EDGE, int X, int Y);
     Node() {};
     std::vector<Node*> neighbours;
@@ -44,6 +45,8 @@ public:
 class Astar
     {
     std::vector<Node> nodes;
+
+    std::vector<int> notTraversable;
 
     /* Find all neighbours to a node. 
      * foreach match update n.neighbours, with a reference
@@ -80,18 +83,27 @@ protected:
      * Set source to zero
      * relax edges until no changes
      * check for negative-weigth cycles /* not implemented
+     *
+     * @map - a 2-dimensional vector[cols][rows]
      */
-    std::vector<Node> find_path(int x, int y, const std::vector<std::vector<int> > map);
+    std::vector<Node> find_path(int x, int y, const std::vector<std::vector<int> > &map);
 
 public:
     /*
      * Main method in Astar, returns a list of nodes, which contains initial node, end node, 
      * and alle nodes in between which results in the fastest path between initial and end.
+     *
+     * @map - a 2-dimensional vector[cols][rows]
      */
-    std::vector<Node> shortest_path(int fromX, int fromY, int toX, int toY, const std::vector<std::vector<int> > map, 
+    std::vector<Node> shortest_path(int fromX, int fromY, int toX, int toY, 
+        const std::vector<std::vector<int> > &map, 
+        const std::vector<int> &notTraversable = std::vector<int>(),
         bool debug=false);
 
-    /* Generate 2-dimensional vector it random values between 1 and 6 */
-    std::vector<std::vector<int> > generateMap(int cols, int rows);
+    /* Generate 2-dimensional vector it random values between 1 and 6 
+     *
+     * @return vector[cols][rows]
+     */
+    std::vector<std::vector<int> > generateMap(int cols, int rows, int values=6);
     };
 #endif

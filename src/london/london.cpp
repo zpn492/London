@@ -167,7 +167,6 @@ inline const char* EmptyDeck::what() const throw()
     Game::Game(int enemies, int decksize)  
         {
         // Set ViewPoints
-        
         View::ViewPoint vp1; vp1.f = &View::buildLoop;
         View::ViewPoint vp2; vp2.f = &View::runCity;
         View::ViewPoint vp3; vp3.f = &View::takeLoan;
@@ -179,7 +178,6 @@ inline const char* EmptyDeck::what() const throw()
         View::viewpoints.insert ( std::pair<char,View::ViewPoint>('t',vp3) );
         View::viewpoints.insert ( std::pair<char,View::ViewPoint>('v',vp4) );
         View::viewpoints.insert ( std::pair<char,View::ViewPoint>('d',vp5) );
-        
 
         // Initiate game
         Logger log;
@@ -323,7 +321,6 @@ namespace London
             std::string s = "";
             std::cout << "Card was drawn, remaing in deck: " << 
                 filehandler::int_to_string(deck.size()) << std::endl;
-
             
             while(TRUE)
                 {
@@ -331,10 +328,8 @@ namespace London
 
                 if(s.c_str()[0] == 'e')
                     break;
-                
                 if(s.c_str()[0] == 'q')
                     exit(0);
-
                 else if(viewpointsIt != viewpoints.end())
                     {
                     system("CLS");

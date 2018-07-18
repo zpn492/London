@@ -10,7 +10,10 @@
 #include <cerrno>
 #include <sstream>
 #include <thread>
+#include <mutex>
 #include <time.h>
+#include <sys/time.h>
 #include <unistd.h>
+#include <assert.h>
 
 #endif

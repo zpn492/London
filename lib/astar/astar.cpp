@@ -11,7 +11,8 @@ Node::Node(int EDGE, int X, int Y)
     y = Y; 
     estimatedCost = 1000;
     connectionX = -1; 
-    connectionY = -1; 
+    connectionY = -1;
+    traversable = true; 
     };
 
 /* ********************************* */
@@ -26,6 +27,19 @@ void Astar::find_neighbours(const std::vector<std::vector<int> > &map, Node &n)
             {
             if(find_node_id(n.x+i, n.y+j) == -1)
                 continue;
+            
+            Node n1 = nodes[find_node_id(n.x+i, n.y+j)];
+            
+            if(!notTraversable.empty())
+                {
+                int counter = 0;
+                for(int k = 0; k < notTraversable.size(); k++)
+                    if(notTraversable[k] == n1.edge)
+                        counter++;
+                if(counter > 0)
+                    continue;
+                }
+            
             n.neighbours.push_back(&nodes[find_node_id(n.x+i, n.y+j)]);
             }
         }
@@ -59,7 +73,7 @@ int Astar::find_node_id(int x, int y)
     return -1;
     };
 
-std::vector<Node> Astar::find_path(int x, int y, const std::vector<std::vector<int> > map)
+std::vector<Node> Astar::find_path(int x, int y, const std::vector<std::vector<int> > &map)
     {
     init(map);
     nodes[find_node_id(x, y)].estimatedCost = 0;
@@ -71,9 +85,11 @@ std::vector<Node> Astar::find_path(int x, int y, const std::vector<std::vector<i
             {
             for(int j = 0; j < nodes[i].neighbours.size(); j++)
                 {
-                if(nodes[i].estimatedCost > weight(nodes[i]) + nodes[i].neighbours[j]->estimatedCost )
+                if(nodes[i].estimatedCost > weight(nodes[i]) + 
+                    nodes[i].neighbours[j]->estimatedCost )
                     {
-                    nodes[i].estimatedCost = weight(nodes[i]) + nodes[i].neighbours[j]->estimatedCost;
+                    nodes[i].estimatedCost = weight(nodes[i]) + 
+                        nodes[i].neighbours[j]->estimatedCost;
                     nodes[i].connectionX = nodes[i].neighbours[j]->x;
                     nodes[i].connectionY = nodes[i].neighbours[j]->y;
                     changesWereMade = true;
@@ -84,9 +100,12 @@ std::vector<Node> Astar::find_path(int x, int y, const std::vector<std::vector<i
     return nodes;
     };
 
-std::vector<Node> Astar::shortest_path(int fromX, int fromY, int toX, int toY, const std::vector<std::vector<int> > map, 
+std::vector<Node> Astar::shortest_path(int fromX, int fromY, int toX, int toY, 
+    const std::vector<std::vector<int> > &map,
+    const std::vector<int> &notTraversable,
     bool debug)
     {
+    this->notTraversable = notTraversable;
     std::vector<Node> path = find_path(toX,toY,map);
     std::vector<Node> finalPath;
 
@@ -106,10 +125,11 @@ std::vector<Node> Astar::shortest_path(int fromX, int fromY, int toX, int toY, c
     if(debug)
         {
         std::cout << "From: (" << fromX << ", " << fromY << "), To: (" << toX << ", " << toY << ")" << std::endl; 
-        std::cout << "(" << fromX << ", " << fromY << ") -> ";
+        
 
-        for(int i = 0; i < path.size(); i++)
+        for(int i = 0; i < finalPath.size(); i++)
             {
+            std::cout << "(" << finalPath[i].x << ", " << finalPath[i].y << ") -> ";
             std::cout << "Initial cost: " << path[i].edge << ", Connection cost: ";
             std::cout << path[i].estimatedCost << ", Neigbours: ";
             for(int j = 0; j < path[i].neighbours.size(); j++)
@@ -120,7 +140,7 @@ std::vector<Node> Astar::shortest_path(int fromX, int fromY, int toX, int toY, c
     return finalPath;
     };
 
-std::vector<std::vector<int> > Astar::generateMap(int cols, int rows)
+std::vector<std::vector<int> > Astar::generateMap(int cols, int rows, int values)
     {
     std::vector<std::vector<int> > map;
     std::srand(std::time(NULL));
@@ -132,7 +152,7 @@ std::vector<std::vector<int> > Astar::generateMap(int cols, int rows)
         map.push_back(row);
         for(int j = 0; j < rows; j++)
             {
-            random_v = 1+ std::rand() / ((RAND_MAX + 1u) / 6);
+            random_v = 1+ std::rand() / ((RAND_MAX + 1u) / values);
             map[i].push_back(random_v);
             }
         }

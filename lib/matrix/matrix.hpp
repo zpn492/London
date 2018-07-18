@@ -23,12 +23,15 @@ namespace linalg
 
         Matrix(int rows, int cols);
         Matrix(const Matrix &m);
+        Matrix(std::vector<std::vector<double> > t_data);
+        Matrix(std::vector<std::vector<int> > t_data);
 
         operator*(double v);
         operator+(double v);
+        operator%(double v);
         operator*(const Matrix &m) throw();
-        operator+(const Matrix &m);
         operator-(const Matrix &m);
+        operator+(const Matrix &m);
         operator=(const Matrix &m);
         
         /**
