@@ -9,8 +9,19 @@ namespace filehandler
     {
     extern bool exists_file(const char *filename, Logger &logger);
     
+    /*
+     * NIX way to get file size without seeking to the end and back
+     * struct stat filestatus;
+     * stat(filename, &filestatus);
+     * size_t total_size = filestatus.st_size;
+     */
+    extern std::streampos file_size(const char *filename, Logger &logger);
+    
     /* Read an entire file into a string */
     extern std::string get_file_contents(const char *filename, Logger &logger);
+
+    extern std::string get_file_chunk(const char *filename, 
+    size_t begin, size_t end, Logger &logger);
 
     extern bool create_file(const char *filename, Logger &logger);
 

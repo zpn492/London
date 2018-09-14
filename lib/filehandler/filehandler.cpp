@@ -14,6 +14,19 @@ bool filehandler::exists_file(const char *filename, Logger &logger)
     return false;
     };
 
+std::streampos filehandler::file_size(const char *filename, Logger &logger)
+	{
+	if(!filehandler::exists_file(filename, logger))
+		return 0;
+    std::streampos begin, end;
+	std::ifstream mfile(filename, std::ios::binary);
+	begin = mfile.tellg();
+	mfile.seekg(0, std::ios::end);
+	end = mfile.tellg();
+	mfile.close();
+	return end - begin;
+	};
+
 /* Read an entire file into a string */
 std::string filehandler::get_file_contents(const char *filename, Logger &logger)
 	{   
@@ -32,6 +45,24 @@ std::string filehandler::get_file_contents(const char *filename, Logger &logger)
 		}
 	throw(errno);
 	};
+
+std::string filehandler::get_file_chunk(const char *filename, 
+    size_t begin, size_t end, Logger &logger)
+    {
+    if(!filehandler::exists_file(filename, logger))
+		return std::string("");
+    std::ifstream in(filename, std::ios::in | std::ios::binary);
+    if (in)
+		{
+		std::string contents;
+		in.seekg(begin);
+		contents.resize(end-begin);
+		in.read(&contents[0], contents.size());
+		in.close();
+		return(contents);
+		}
+	throw(errno);
+    };
 
 bool filehandler::create_file(const char *filename, Logger &logger)
     {

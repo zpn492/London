@@ -1,6 +1,92 @@
 #include "http.hpp"
 
 /* ************************************************ */
+/* HTTPDecodeRequest */
+/* ************************************************ */
+HTTPDecodeRequest::HTTPDecodeRequest(std::string request, HTTPResponse &r, Logger &log)
+    {
+    headers = filehandler::split_string(request, '\n');
+    
+    std::vector<std::string> method = filehandler::split_string(headers[0], ' ');
+    getquery = filehandler::split_string(method[1], '?');
+    method[1] = getquery[0];
+
+    filepath = method[1].compare("/") == 0 ? r.indexpath : method[1];
+    filepath = r.folderpath + filepath;
+
+    if(setRangeIfAny(log)) 
+        httpmethod = r.http206;
+    else
+        httpmethod = r.http200;
+
+    if(!filehandler::exists_file(filepath.c_str(), log)) 
+        {
+        filepath = r.filenotfoundpath;
+        filepath = r.folderpath + filepath;
+        httpmethod = r.http404;
+        range = false;
+        }     
+
+    std::string tmp = filepath;
+    filetype = filehandler::split_string(tmp, '.');
+    contentsize = filehandler::file_size(filepath.c_str(), log);
+    partialsize = contentsize+1;
+
+    if(range)
+        {
+        if(to == 0) to = from + std::min(2000000, contentsize);
+        to = 0 + std::min((int)to, contentsize);
+        contentsize = to - from + 1;
+        content = filehandler::get_file_chunk(filepath.c_str(), from, to, log);
+        }       
+    else
+        {
+        content = filehandler::get_file_contents(filepath.c_str(), log);
+        } 
+    };
+
+void HTTPDecodeRequest::tsend(Sock &s, HTTPResponse &r)
+    {
+    tsendHeaders(s, r);
+    tsendFile(s);
+    };
+
+void HTTPDecodeRequest::tsendHeaders(Sock &s, HTTPResponse &r)
+    {
+    s.tsend(httpmethod.c_str());
+    s.tsend(r.headerContentLength(contentsize).c_str());        
+    s.tsend(r.headerConnection().c_str()); 
+    s.tsend(r.headerAcceptRanges().c_str());
+    if(range) s.tsend(r.headerContentRange(from, to, partialsize).c_str());
+    s.tsend(r.headerContentType(filetype[1]).c_str()); 
+    s.tsend(r.httpEnd);
+    };
+
+void HTTPDecodeRequest::tsendFile(Sock &s)
+    {
+    s.tsend(content.c_str(), contentsize);
+    };
+
+bool HTTPDecodeRequest::setRangeIfAny(Logger &log)
+    {
+    for(int i = 1; i < headers.size(); i++)
+        {
+        if(headers[i].find("Range") != std::string::npos)
+            {
+            std::vector<std::string> tmp1 = filehandler::split_string(headers[i], ' ');
+            std::vector<std::string> tmp2 = filehandler::split_string(tmp1[1], '=');
+            std::vector<std::string> tmp3 = filehandler::split_string(tmp2[1], '-');
+            from = atoi(tmp3[0].c_str());
+            to = atoi(tmp3[1].c_str());
+            range = true;
+            return true;
+            }
+        }
+    range = false;
+    return false;
+    };
+
+/* ************************************************ */
 /* HTTPResponse */
 /* ************************************************ */
 
@@ -64,9 +150,10 @@ std::string HTTPResponse::headerAcceptRanges()
     return s;
     };
 
-std::string HTTPResponse::headerContentRange(std::string &range)
+std::string HTTPResponse::headerContentRange(size_t from, size_t to, int contentsize)
     {
-    std::string s = "Content-Range: bytes "+range+"\r\n";
+    std::string s = std::string("Content-Range: bytes ")+filehandler::int_to_string(from)+std::string("-");
+    s += filehandler::int_to_string(to)+std::string("/")+filehandler::int_to_string(contentsize)+std::string("\r\n");
     return s;
     };
 
@@ -102,15 +189,9 @@ void HTTPHandler::handle(Sock &s, HTTPResponse &r)
     int recv, contentsize, type;
 
     std::string request, filepath, content, tmp;
-    std::vector<std::string> tokens, filetype;
+    std::vector<std::string> method, query, tokens, filetype;
 
     recv = s.trecv(buffer, DEFUALTBUFFERSIZE);
-
-    /* Opdel headers */
-    /* ..... */
-
-    /* Find ud af om RANGE indgår blandt headers */
-    /* ..... */
 
     if(recv == -1)
         {
@@ -122,49 +203,9 @@ void HTTPHandler::handle(Sock &s, HTTPResponse &r)
 
         request = buffer;
 
-        tokens = filehandler::split_string(request, ' ');
+        HTTPDecodeRequest dr(request, r, log);
 
-        /* Find GET query */
-        /* ..... */
-
-        filepath = tokens[1].compare("/") == 0 ? r.indexpath : tokens[1];
-        filepath = r.folderpath + filepath;
-        
-        if(filehandler::exists_file(filepath.c_str(), log))
-            {
-            tmp = filepath;
-            filetype = filehandler::split_string(tmp, '.');
-
-            content = filehandler::get_file_contents(filepath.c_str(), log);
-            contentsize = (int)content.size();
-            
-            s.tsend(r.http200);
-            s.tsend(r.headerContentLength(contentsize).c_str());        
-            s.tsend(r.headerConnection().c_str()); 
-            s.tsend(r.headerContentType(filetype[1]).c_str()); 
-            s.tsend(r.httpEnd);
-
-            std::cout << content.size() << std::endl;
-            s.tsend(content.c_str(), contentsize);
-            }
-        else
-            {
-            filepath = r.filenotfoundpath;
-            filepath = r.folderpath + filepath;
-            tmp = filepath;
-            filetype = filehandler::split_string(tmp, '.');
-            
-            filehandler::exists_file(filepath.c_str(), log);
-            content = filehandler::get_file_contents(filepath.c_str(), log);
-            contentsize = (int)content.size();
-            
-            s.tsend(r.http404);
-            s.tsend(r.headerContentLength(contentsize).c_str());
-            s.tsend(r.headerContentType(filetype[1]).c_str());
-            s.tsend(r.httpEnd);
-
-            s.tsend(content.c_str());            
-            }
+        dr.tsend(s, r);
         }
     s.tshutdown();
     };

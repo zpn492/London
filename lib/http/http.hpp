@@ -16,7 +16,7 @@ public:
     std::string headerConnection();
     std::string headerContentType(std::string &type);
     std::string headerAcceptRanges();
-    std::string headerContentRange(std::string &range);
+    std::string headerContentRange(size_t from, size_t to, int contentsize);
 
     const char *folderpath;
     const char *indexpath;
@@ -26,6 +26,28 @@ public:
     const char *http404; 
     const char *httpEnd;
     std::map<string, string> types;
+    };
+
+class HTTPDecodeRequest
+    {
+public:
+    HTTPDecodeRequest(std::string request, HTTPResponse &r, Logger &log);
+    void tsend(Sock &s, HTTPResponse &r);
+private:
+    void tsendHeaders(Sock &s, HTTPResponse &r);
+    void tsendFile(Sock &s);
+    bool setRangeIfAny(Logger &log);
+    std::vector<std::string> headers;
+    std::vector<std::string> getquery;
+    std::string httpmethod;
+    std::string filepath;
+    std::vector<std::string> filetype;
+    int contentsize;
+    int partialsize;
+    std::string content;
+    bool range;
+    size_t from;
+    size_t to;
     };
 
 class HTTPHandler
