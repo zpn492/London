@@ -4,7 +4,7 @@
 #include "../../SimpleJust.h"
 
 #include "../../lib/astar/astar.hpp"
-#include "../../src/walker/walker.hpp"
+#include "../../lib/walker/walker.hpp"
 
 /**
  * This file contains view mobility.

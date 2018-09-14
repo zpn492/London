@@ -17,13 +17,13 @@
 #include "lib/mortality/mortality.hpp"
 
 /* London */
-#include "src/london/london.hpp"
+#include "lib/london/london.hpp"
 
-#include "src/block/block.hpp"
+#include "lib/block/block.hpp"
 
-#include "src/basecamp/basecamp.hpp"
+#include "lib/basecamp/basecamp.hpp"
 
-#include "src/walker/walker.hpp"
+#include "lib/walker/walker.hpp"
 
 #include "lib/png/png.h"
 

@@ -27,16 +27,6 @@
 
 #include "lib/png/png.h"
 
-void HTTPServer()
-    {
-    HTTP http; http.start(80, "127.0.0.1", "data/public_html");
-    };
-
-void london(int decksize)
-    {
-    London::Game(0, decksize);    
-    };
-
 /* This is where all the input to the window goes to */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
     PAINTSTRUCT ps;  

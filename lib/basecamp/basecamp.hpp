@@ -3,8 +3,8 @@
 
 #include "../../SimpleJust.h"
 
-#include "../london/london.hpp"
-#include "../block/block.hpp"
+#include "../../lib/filehandler/filehandler.h"
+#include "../../lib/block/block.hpp"
 
 class Gauss : public London::Graphics::LondonObject
     {
