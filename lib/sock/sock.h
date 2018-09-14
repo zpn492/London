@@ -8,6 +8,7 @@
 using namespace std;
 
 #define DEFUALTBUFFERSIZE 4096	// Remember low buffersize can result in buffer overflow
+#define DEFAULTCHUNKSIZE 1024*1024*2
 
 /**
 @auther Benjamin Brandt Ohrt

@@ -7,6 +7,23 @@
 #ifndef __HTTP__
 #define __HTTP__
 
+/**
+ * Simple HTTP Server
+ *
+ * RFC 2616
+ * Hypertext Transfer Protocol -- HTTP/1.1
+ * https://tools.ietf.org/html/rfc2616 
+ *
+ * Supported status code protocols:
+ * 200 OK
+ * 206 Partial Content
+ * 404 Not Found
+ *
+ * Example:
+ * HTTP server(80, "127.0.0.1", "data/public_html");
+ * server.start();
+ */ 
+
 class HTTPResponse
     {
 public:
@@ -53,7 +70,7 @@ private:
 class HTTPHandler
     {
 public:
-    void handle(Sock &s, HTTPResponse &r);
+    void handle(Sock &s, HTTPResponse &r, Logger &log);
     };
 
 class HTTP
@@ -64,6 +81,7 @@ private:
     HTTPResponse r;
     HTTPHandler h;
     Sock server;
+    Logger log;
     };
 
 #endif

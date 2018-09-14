@@ -27,14 +27,13 @@ HTTPDecodeRequest::HTTPDecodeRequest(std::string request, HTTPResponse &r, Logge
         range = false;
         }     
 
-    std::string tmp = filepath;
-    filetype = filehandler::split_string(tmp, '.');
+    filetype = filehandler::split_string(filepath, '.');
     contentsize = filehandler::file_size(filepath.c_str(), log);
     partialsize = contentsize+1;
 
     if(range)
         {
-        if(to == 0) to = from + std::min(2000000, contentsize);
+        if(to == 0) to = from + std::min(DEFAULTCHUNKSIZE, contentsize);
         to = 0 + std::min((int)to, contentsize);
         contentsize = to - from + 1;
         content = filehandler::get_file_chunk(filepath.c_str(), from, to, log);
@@ -163,43 +162,38 @@ std::string HTTPResponse::headerContentRange(size_t from, size_t to, int content
 
 void HTTP::start(int port, const char ip[], const char folder[])
     {    
-    Logger log;
     r.setFolder(folder);
     server.topen(port, ip, 0);
-    std::cout << "HTTPServer is running" << std::endl;
+    log.write(FGREEN, "HTTPServer is running");
     
     while(true)
         {
         Sock s = server.taccept(log);
-        h.handle(s, r);
+        h.handle(s, r, log);
         }
 
-    std::cout << "HTTPServer is ended" << std::endl;
+    log.write(FGREEN, "HTTPServer is ended");
     }
 
 /* ************************************************ */
 /* HTTPHandler */
 /* ************************************************ */
 
-void HTTPHandler::handle(Sock &s, HTTPResponse &r)
-    {
-    Logger log;
-    
+void HTTPHandler::handle(Sock &s, HTTPResponse &r, Logger &log)
+    {    
     char buffer[DEFUALTBUFFERSIZE];
-    int recv, contentsize, type;
-
-    std::string request, filepath, content, tmp;
-    std::vector<std::string> method, query, tokens, filetype;
+    std::string request;
+    int recv;
 
     recv = s.trecv(buffer, DEFUALTBUFFERSIZE);
 
     if(recv == -1)
         {
-        std::cout << "Nothing was received" << std::endl;
+        log.write(FRED, "Nothing was received");
         }
     else
         {
-        std::cout << buffer << std::endl;
+        log.write(0, buffer);
 
         request = buffer;
 

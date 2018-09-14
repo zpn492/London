@@ -19,9 +19,16 @@ void Logger::write_inline(std::string s)
 	};
 void Logger::write(int frontcolor, const char message[])
 	{
-	setColor(frontcolor);
-	std::cout << message << std::endl;
-	resetColor();
+	if(frontcolor == 0)
+		{
+		std::cout << message << std::endl;
+		}
+	else
+		{
+		setColor(frontcolor);
+		std::cout << message << std::endl;
+		resetColor();
+		}
 	};
 void Logger::end()
 	{
