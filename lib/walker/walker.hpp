@@ -28,7 +28,7 @@ protected:
      * https://en.wikipedia.org/wiki/Convolution#Discrete_convolution
      */
     std::vector<std::vector<double> > convolve2D(std::vector<std::vector<double> > a, 
-        std::vector<std::vector<double> > b, bool debug=FALSE);
+        std::vector<std::vector<double> > b, bool debug=0);
 
     
     /**

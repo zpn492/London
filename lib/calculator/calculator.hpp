@@ -2,7 +2,6 @@
 #include "../../SimpleJust.h"
 
 #include "../../lib/filehandler/filehandler.h"
-#include "../../lib/logger/logger.h"
 #include "../../lib/matrix/matrix.hpp"
 
 /* ******************************************************** */

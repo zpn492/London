@@ -1,6 +1,6 @@
 #include "filehandler.h"
 
-bool filehandler::exists_file(const char *filename, Logger &logger)
+bool filehandler::exists_file(const char *filename)
     {
     std::ifstream tfile(filename);
         if(tfile.is_open())
@@ -8,15 +8,13 @@ bool filehandler::exists_file(const char *filename, Logger &logger)
             tfile.close();
             return true;
             }
-	logger.setColor(FRED);
 	printf("File not found, %s\n", filename);
-	logger.resetColor();
     return false;
     };
 
-std::streampos filehandler::file_size(const char *filename, Logger &logger)
+std::streampos filehandler::file_size(const char *filename)
 	{
-	if(!filehandler::exists_file(filename, logger))
+	if(!filehandler::exists_file(filename))
 		return 0;
     std::streampos begin, end;
 	std::ifstream mfile(filename, std::ios::binary);
@@ -28,9 +26,9 @@ std::streampos filehandler::file_size(const char *filename, Logger &logger)
 	};
 
 /* Read an entire file into a string */
-std::string filehandler::get_file_contents(const char *filename, Logger &logger)
+std::string filehandler::get_file_contents(const char *filename)
 	{   
-	if(!filehandler::exists_file(filename, logger))
+	if(!filehandler::exists_file(filename))
 		return std::string("");
 	std::ifstream in(filename, std::ios::in | std::ios::binary);
 	if (in)
@@ -47,9 +45,9 @@ std::string filehandler::get_file_contents(const char *filename, Logger &logger)
 	};
 
 std::string filehandler::get_file_chunk(const char *filename, 
-    size_t begin, size_t end, Logger &logger)
+    size_t begin, size_t end)
     {
-    if(!filehandler::exists_file(filename, logger))
+    if(!filehandler::exists_file(filename))
 		return std::string("");
     std::ifstream in(filename, std::ios::in | std::ios::binary);
     if (in)
@@ -64,30 +62,26 @@ std::string filehandler::get_file_chunk(const char *filename,
 	throw(errno);
     };
 
-bool filehandler::create_file(const char *filename, Logger &logger)
+bool filehandler::create_file(const char *filename)
     {
-	if(!filehandler::exists_file(filename, logger))
+	if(!filehandler::exists_file(filename))
 		{
 		std::ofstream mfile;
 		mfile.open(filename);
 		mfile.close();
-		logger.setColor(FGREEN);
 		printf("Create file, %s\n", filename);
-		logger.resetColor();
 		return true;
 		}
 	return false;
     };
 
-bool filehandler::delete_file(const char *filename, Logger &logger)
+bool filehandler::delete_file(const char *filename)
     {
 	if(remove(filename) != 0)
 		{
 		return false;
 		}
-		logger.setColor(FYELLOW);
 		printf("Delete file, %s\n", filename);
-		logger.resetColor();
 	return true;
     };
 
@@ -149,9 +143,9 @@ void filehandler::write_file(const char *filename, std::string text)
     outf.close();
     };
 
-void filehandler::print_file(const char *filename, Logger &logger)
+void filehandler::print_file(const char *filename)
     {
-    if(!filehandler::exists_file(filename, logger))
+    if(!filehandler::exists_file(filename))
         return;
     std::ifstream mfile(filename);
     std::string line;

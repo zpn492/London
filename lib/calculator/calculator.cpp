@@ -57,8 +57,7 @@ void linalg::scalar(char &operation, std::string a, std::string num, std::string
     
 std::map<std::string, Matrix> linalg::decode_file(const char *filename)
     {
-    Logger log;
-    std::string s = filehandler::get_file_contents(filename, log);
+    std::string s = filehandler::get_file_contents(filename);
 
     s.erase(std::remove(s.begin(), s.end(), '\r'), s.end());   
     s.erase(std::remove(s.begin(), s.end(), '\n'), s.end());  

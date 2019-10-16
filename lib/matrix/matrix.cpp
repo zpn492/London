@@ -6,34 +6,37 @@ namespace linalg
     /* Operations */
     /* ******************************************************** */
 
-    Matrix::operator*(double v)
+    int Matrix::operator*(double v)
         {
         for(int i = 0; i < data.size(); i++)
             {
             for(int j = 0; j < data[i].size(); j++)
                 data[i][j] *= v;
             }
+        return 0;
         };
     
-     Matrix::operator+(double v)
+     int Matrix::operator+(double v)
         {
         for(int i = 0; i < data.size(); i++)
             {
             for(int j = 0; j < data[i].size(); j++)
                 data[i][j] += v;
             }
+        return 0;
         };
 
-    Matrix::operator%(double v)
+    int Matrix::operator%(double v)
         {
         for(int i = 0; i < data.size(); i++)
             {
             for(int j = 0; j < data[i].size(); j++)
                 data[i][j] = std::fmod(data[i][j], v);
             }
+        return 0;
         };   
 
-    Matrix::operator*(const Matrix &m) throw()
+    int Matrix::operator*(const Matrix &m) throw()
         {
         try
             {
@@ -62,25 +65,29 @@ namespace linalg
             std::cout << e.what() << " (Matrix A): (" << cols << ")" << " (Matrix B): (" << m.rows << ")" << std::endl;
             std::abort();
             }
+        return 0;
         };
 
-    Matrix::operator+(const Matrix &m)
+    int Matrix::operator+(const Matrix &m)
         {
         for(int i = 0; i < m.rows; i++)
             for(int j = 0; j < m.cols; j++)
                 data[i][j] += m.data[i][j];
+        return 0;
         };
 
-    Matrix::operator-(const Matrix &m)
+    int Matrix::operator-(const Matrix &m)
         {
         for(int i = 0; i < m.rows; i++)
             for(int j = 0; j < m.cols; j++)
                 data[i][j] -= m.data[i][j];
+        return 0;
         };
 
-    Matrix::operator=(const Matrix &m)
+    int Matrix::operator=(const Matrix &m)
         {
         data = m.data; rows = m.rows; cols = m.cols;
+        return 0;
         };
 
     /* ******************************************************** */

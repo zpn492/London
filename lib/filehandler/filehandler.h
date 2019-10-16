@@ -1,13 +1,11 @@
 #ifndef FILEHANDLER_H_
 #define FILEHANDLER_H_
 
-#include "..\Logger\logger.h" 
-
 #include "../../SimpleJust.h"
 
 namespace filehandler
     {
-    extern bool exists_file(const char *filename, Logger &logger);
+    extern bool exists_file(const char *filename);
     
     /*
      * NIX way to get file size without seeking to the end and back
@@ -15,17 +13,17 @@ namespace filehandler
      * stat(filename, &filestatus);
      * size_t total_size = filestatus.st_size;
      */
-    extern std::streampos file_size(const char *filename, Logger &logger);
+    extern std::streampos file_size(const char *filename);
     
     /* Read an entire file into a string */
-    extern std::string get_file_contents(const char *filename, Logger &logger);
+    extern std::string get_file_contents(const char *filename);
 
     extern std::string get_file_chunk(const char *filename, 
-    size_t begin, size_t end, Logger &logger);
+    size_t begin, size_t end);
 
-    extern bool create_file(const char *filename, Logger &logger);
+    extern bool create_file(const char *filename);
 
-    extern bool delete_file(const char *filename, Logger &logger);
+    extern bool delete_file(const char *filename);
 	
 	/* Split a string by charator fx '\n' newline */
     extern std::vector<std::string> split_string(std::string &s, char delimeter);
@@ -41,7 +39,7 @@ namespace filehandler
      */
     extern void write_file(const char *filename, std::string text);
 
-    extern void print_file(const char *filename, Logger &logger);
+    extern void print_file(const char *filename);
 
     extern std::string int_to_string(int value);
 
