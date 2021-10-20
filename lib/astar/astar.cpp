@@ -53,7 +53,11 @@ void Astar::init(const std::vector<std::vector<int> > &map)
         {
         for(int j = 0; j < map[i].size(); j++)
             {
-            Node n(map[i][j], i, j);
+            int v = map[i][j];
+            for(int k = 0; k < notTraversable.size(); k++)
+                if(notTraversable[k] == v)
+                    v = 1000;
+            Node n(v, i, j);
             nodes.push_back(n);
             }
         }
@@ -157,4 +161,27 @@ std::vector<std::vector<int> > Astar::generateMap(int cols, int rows, int values
             }
         }
     return map;
+    };
+
+std::vector<Node> Astar::getNeighbourhood(int x, int y, int maxX, int maxY, int viewzone)
+    {
+    int c2 = viewzone/2;
+    int r2 = viewzone/2;
+    int tx, ty;
+    std::vector<Node> neighbours;
+    for(int i = -c2; i < c2; i++)
+        {
+        tx = i + x;
+        if(tx < 0 || tx >= maxX)
+            continue;
+        for(int j = -r2; j < r2; j++)
+            {
+            ty = j + y;
+            if(tx < 0 || tx >= maxX || ty < 0 || ty >= maxY)
+                continue;
+            else
+                neighbours.push_back(Node(0, tx, ty));
+            }
+        }
+    return neighbours;
     };

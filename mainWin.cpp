@@ -2,54 +2,13 @@
 #include "SimpleJust.h"
 
 /* filehandler */
-#include "lib/filehandler/filehandler.h"
-#include "lib/logger/logger.h"
+#include "lib/block/block.hpp"
 
-/* WIN - HTTP server */
-#include "lib/http/http.hpp"
+#include "lib/worker/worker.hpp"
 
-/* linalg */
-#include "lib/matrix/matrix.hpp"
-#include "lib/calculator/calculator.hpp"
+#include "lib/market/market.hpp"
 
-/* livsforsikringsmatematik */
-#include "lib/insurance/insurance.hpp"
-#include "lib/mortality/mortality.hpp"
-
-/* London */
-#include "src/london/london.hpp"
-
-#include "src/block/block.hpp"
-
-#include "src/basecamp/basecamp.hpp"
-
-#include "src/walker/walker.hpp"
-
-#include "lib/png/png.h"
-
-/* This is where all the input to the window goes to */
-LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
-    PAINTSTRUCT ps;  
-    HDC hdc;  
-    switch(Message) {
-        case WM_ERASEBKGND:
-            return (LRESULT)1; // Say we handled it.
-        case WM_PAINT:     
-			London::Graphics::repaint(hwnd, London::Graphics::lController.lObjects);
-			London::Graphics::turn(London::Graphics::lController.lObjects);
-            London::vsleep(1);
-        break;  
-		/* Upon destruction, tell the main thread to stop */
-		case WM_DESTROY: {
-			PostQuitMessage(0);
-			break;
-		}
-		/* All other messages (a lot of them) are processed using default procedures */
-		default:
-			return DefWindowProc(hwnd, Message, wParam, lParam);
-	}
-	return 0;
-}
+LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
 /* The 'main' function of Win32 GUI programs: this is where execution starts */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
@@ -59,15 +18,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HWND hwnd, hwnd1; /* A 'HANDLE', hence the H, or a pointer to our window */
 	MSG msg; /* A temporary location for all messages */
 
-	/**
-     * Basecamp (PosX, PosY, maxVillages, int[cols][rows])
-     */
-    Basecamp b1(32, 24, 4); //, London::Graphics::lController.map);
+	/* Do your magic here */
+	/* metode til at loade en xml */
+	Worker worker(32,16,32,16);
 
-    /**
-     * Add basecamp to controller (painting & logic)
-     */
-    London::Graphics::lController.lObjects.push_back(&b1);
+	Market iron(32,16,32,16, "iron");
+	Market wool(32,16,32,16, "wool");
+
+	London::Graphics::lController.lObjects.push_back(&worker);
+	London::Graphics::lController.lObjects.push_back(&iron);
+	London::Graphics::lController.lObjects.push_back(&wool);
 
 	/* zero out the struct and set the stuff we want to modify */
 	memset(&wc,0,sizeof(wc));
@@ -110,3 +70,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	return msg.wParam;         
     };
+
+/* This is where all the input to the window goes to */
+LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+    PAINTSTRUCT ps;  
+    HDC hdc;  
+    switch(Message) {
+        case WM_ERASEBKGND:
+            return (LRESULT)1; // Say we handled it.
+        case WM_PAINT:     
+			London::Graphics::turn(London::Graphics::lController.lObjects);
+			London::Graphics::repaint(hwnd, London::Graphics::lController.lObjects);
+            London::vsleep(1);
+        break;  
+		/* Upon destruction, tell the main thread to stop */
+		case WM_DESTROY: {
+			PostQuitMessage(0);
+			break;
+		}
+		/* All other messages (a lot of the m) are processed using default procedures */
+		default:
+			return DefWindowProc(hwnd, Message, wParam, lParam);
+	}
+	return 0;
+}

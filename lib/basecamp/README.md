@@ -22,3 +22,7 @@ Basecamp b1(32, 24, 4);
 //Add basecamp to controller (painting & logic)
 London::Graphics::lController.lObjects.push_back(&b1);
 ```
+
+# Links
+> windows.h
+> libgdi32.a

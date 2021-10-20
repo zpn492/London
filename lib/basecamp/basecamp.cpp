@@ -14,11 +14,13 @@ void Gauss::cpaint(HDC &hdc, RECT &rcWindow)
         for(int j = 0; j < g[i].size(); j++)
             {
             int c = std::min(255, (int)(g[i][j]));
+            c = c < 255 ? 0 : 255;
             for(int k = 0; k < times; k++)
                 {
                 for(int v = 0; v < times; v++)
                     {
                     SetPixel(hdc, x+(i*times)+k, y+(j*times)+v, RGB(c,c,c));
+                    //TextOut(hdc, x+(i*times)+k, y+(j*times)+v, (std::string("@")).c_str(), (std::string("@")).length());
                     }
                 }
             }
@@ -49,7 +51,7 @@ void Cube::cpaint(HDC &hdc, RECT &rcWindow)
     r.right = rr;
     r.bottom = rr;
     SetTextColor(hdc, RGB(255,0,0));
-    HFONT hFont= (HFONT) CreateFont (FONT_SIZE, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE,     
+    HFONT hFont = (HFONT) CreateFont (FONT_SIZE, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE,     
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
             DEFAULT_PITCH | FF_SWISS, TEXT("Arial"));
 
@@ -138,11 +140,11 @@ void Cube::work()
         // Look around
         if(!fund_resource)
             {
-            std::vector<London::Pos> neighbours = getNeighbourhood((int)VIEW_ZONE);
+            setNeighbourhood((int)VIEW_ZONE);
             for(int i = 0; i < neighbours.size(); i++)
                 {
                 if(LockOrUnlcokOccupationIfValue(neighbours[i].x, 
-                    neighbours[i].y, RESOURCE))
+                    neighbours[i].y,RESOURCE))
                     {
                     destination(neighbours[i].x, neighbours[i].y);
                     fund_resource = TRUE;
@@ -203,8 +205,8 @@ void Basecamp::cpaint(HDC &hdc, RECT &rcWindow)
     TextOut(hdc, 1*STEP, 3*STEP, ss.c_str(), ss.length());
 
     int counter = 0;
-    for(int i = 0; i < getCols(); i++)//for(int i = 0; i < map->size(); i++)
-    for(int j = 0; j < getRows(); j++)//for(int j = 0; j < map->at(i).size(); j++)
+    for(int i = 0; i < getCols(); i++)
+    for(int j = 0; j < getRows(); j++)
     if(getMapValue(i, j) == 7)
         counter += 1;    
     ss = filehandler::int_to_string(counter); ss = "Resourcefields left: " + ss;
@@ -248,5 +250,4 @@ void Basecamp::turn()
         }
         for(int i = 0; i < threads.size(); i++)
             threads[i].join();
-        
     };

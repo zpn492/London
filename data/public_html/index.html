@@ -10,22 +10,35 @@
     <style type="text/css">
         #container {
           max-width: 800px;
-          height:1200px;
+          height:400px;
           margin: auto;
+          display:inline-block;
         }
         #graph-container {
           max-width: 800px;
           height: 400px;
-        }
+        }  
       </style>
 </header>
 
 <body>
-    <div id="container"> 
-
-    <p>This is a simple webpage</p>
-    <canvas id="myChart" style="max-width: 800px; height: 300px;"></canvas>
+  
+  <div id="container"> 
+    <h4>Iron price, production</h4>
+    <!-- position: absolute; z-index: 0; -->
+    <canvas id="ironprice" style="max-width: 400px; height: 300px; float:left"></canvas>    
+    <canvas id="ironproduct" style="max-width: 400px; height: 300px; float:left"></canvas>
+    </div>
+    
+  <div id="container"> 
+    <h4>Wool price, production</h4>
+    <!-- position: absolute; z-index: 0; -->
+    <canvas id="woolprice" style="max-width: 400px; height: 300px; float:left"></canvas>    
+    <canvas id="woolproduct" style="max-width: 400px; height: 300px; float:left"></canvas>
     </div>
 </body>
-    <script type="text/javascript" src="js/chart.js"> </script>
+    <script type="text/javascript" src="js/ironPrice.js"> </script>
+    <script type="text/javascript" src="js/ironProduct.js"> </script>
+    <script type="text/javascript" src="js/woolPrice.js"> </script>
+    <script type="text/javascript" src="js/woolProduct.js"> </script>
 </html>

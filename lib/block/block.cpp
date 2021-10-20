@@ -14,13 +14,47 @@ London::Pos::Pos(int x, int y)
     {this->x = x; this->y = y;};
 
 London::Pos::operator==(Pos &p)
-    {
-    return match(p.x, p.y);
-    };
+    {return match(p.x, p.y);};
 
 bool London::Pos::match(int x, int y) 
-    { return this->x == x && this->y == y ? 1 : 0; };
+    {return this->x == x && this->y == y ? 1 : 0;};
 
+
+/* **************************************** */
+/* London::Graphics::LondonController */
+/* **************************************** */
+
+London::Graphics::LondonController::LondonController()
+    {
+    //Define walker, with a 5x5 Gauss matrix
+    Walker ww(5,5); w = &ww;
+
+    // Seed the random walk algorithm
+    const char* filename = "city_160.png";
+    seed = w->seed(filename);
+
+    // Generate map
+    map = astar.generateMap(64, 48); 
+
+    // Set some resource fields
+    map.at(20)[20] = 7; map.at(5)[10] = 7; map.at(10)[5] = 7; map.at(15)[5] = 7; 
+    map.at(10)[15] = 7; map.at(10)[10] = 7; map.at(30)[20] = 7;
+    map.at(30)[30] = 7; map.at(60)[40] = 7; map.at(25)[45] = 7;
+    
+    // Set values which is not traversable
+    notTraversable.push_back(3);
+
+    // Find neighbourghood for each position
+    for(int x =  0; x < map.size(); x++)
+        {
+        for(int y = 0; y < map.at(x).size(); y++)
+            {
+            Pos p(x,y);
+            std::vector<Node> t = astar.getNeighbourhood(x,y,map.size(),map.at(x).size(),VIEW_ZONE);
+            neighbours.insert ( std::pair<Pos, std::vector<Node> > (p, t) );    
+            }
+        }          
+    };
 
 /* **************************************** */
 /* London::Graphics::LondonObject */
@@ -55,26 +89,6 @@ bool London::Graphics::LondonObject::setMapValue(int x, int y, int value)
         map->at(x)[y] = value;
         return true;
         }
-    };
-
-std::vector<London::Pos> London::Graphics::LondonObject::getNeighbourhood(int view)
-    {
-    int c2 = view/2;
-    int r2 = view/2;
-    int tx, ty;
-    std::vector<London::Pos> neighbours;
-    for(int i = -c2; i < c2; i++)
-        {
-        for(int j = -r2; j < r2; j++)
-            {
-            tx = i + x;
-            ty = j + y;
-            if(tx < 0 || tx >= getCols() || ty < 0 || ty >= getRows())
-                continue;
-            neighbours.push_back(London::Pos(tx, ty));
-            }
-        }
-    return neighbours;
     };
 
 bool London::Graphics::LondonObject::LockOrUnlcokOccupation(int x, int y)
@@ -133,6 +147,7 @@ bool London::Graphics::LondonObject::releaseOccupation(int x, int y)
         Pos p(x, y);
         std::map<Pos, London::Graphics::LondonObject>::iterator occupiedIt = 
             lController.occupied.find(p);
+        delete lController.occupied.find(p)->second.map;
         lController.occupied.erase(occupiedIt);
         return true;
         }
@@ -177,15 +192,28 @@ int London::Graphics::LondonObject::getRows()
 
 void London::Graphics::LondonObject::move()
     { 
-    x = path[step].x;
-    y = path[step].y;
-    step++;
+    if(!path.empty()) 
+        {
+        if(step < path.size()) {
+        this->x = path[step].x;
+        this->y = path[step].y;
+        //std::cout << "step: " << step;
+        //std::cout << " x: " << path[step].x;
+        //std::cout << " y: " << path[step].y << std::endl;
+        step++;
+        return;
+        }
+
+        }
+    randomWalk();
     };
 
 void London::Graphics::LondonObject::origin(int x, int y)
     {
     this->x = x;
     this->y = y;
+    this->ox = x;
+    this->oy = y;
     };
 
 void London::Graphics::LondonObject::destination(int dx, int dy, bool calculatePath)
@@ -194,48 +222,66 @@ void London::Graphics::LondonObject::destination(int dx, int dy, bool calculateP
     this->dx = dx;
     this->dy = dy;
     if(calculatePath)
-        path = lController.astar.shortest_path(x, y, dx, dy, (*map), 
+        {
+        this->path.clear();
+        this->path = lController.astar.shortest_path(x, y, dx, dy, (*map), 
             London::Graphics::lController.notTraversable);
+        }
     else
-        path.push_back(Node(0, x, y));
+        this->path.push_back(Node(0, dx, dy));
     };
 
-std::vector<Node> London::Graphics::LondonObject::randomWalk()
+bool London::Graphics::LondonObject::outOfMap(int tx, int ty)
     {
-    std::vector<Node> path2;
-    int tx = 0; int ty = 0;
-    path.clear();
-    // Search for a path which is keep the object within the map.
+    return tx < 0 || tx >= map->size() || 
+                ty < 0 || ty >= map->at(0).size();
+    };
+
+bool London::Graphics::LondonObject::notTraversable(int tx, int ty)
+    {
+    for(int j = 0; j < London::Graphics::lController.notTraversable.size(); j++)
+    {
+    if(London::Graphics::lController.notTraversable[j] == map->at(tx)[ty])
+        return true;
+    } 
+    return false;
+    };
+
+void London::Graphics::LondonObject::randomWalk()
+    {
+    std::vector<Node> path2; this->path.clear();
+    // Search for a path which will keep the object within the map.
     // 
-    while(path.empty())
+    while(this->path.empty())
         {
+        int tx = 0; int ty = 0; bool b = false;
+        dx = x; dy = y;
+
         path2 = London::Graphics::lController.w->randomWalk
             (London::Graphics::lController.seed);
         
-        for(int i = 0; i < path2.size(); i++)
+        for(int i = 0; i < path2.size(); i++) 
             {
             tx = path2[i].x + x;
             ty = path2[i].y + y;
-            if(tx < 0 || tx >= map->size() || 
-                ty < 0 || ty >= map->at(0).size())
-                {
-                break; // path would have led the object out of bounds
-                }
-            bool b = false;
-            for(int j = 0; j < London::Graphics::lController.notTraversable.size(); j++)
-                if(London::Graphics::lController.notTraversable[j] == map->at(tx)[ty])
-                    b = true; // position is not traversable
-            if(b)
-                break; // position is not traversable
-            if(path.empty())
-                path.push_back(Node(0, x, y));
-            path.push_back(Node(0, tx, ty));
+            if(outOfMap(tx, ty)) break;  // path would have led the object out of bounds
+            if(notTraversable(tx, ty)) break; // path is not traverseble
+            destination(tx, ty, FALSE); // add step to path
             }
         }
     // reset steps & destination
-    step = 0; dx = tx; dy = ty;
-    return path;
+    path2.clear();
+    step = 0; 
     };
+
+bool London::Graphics::LondonObject::grindResource(int x, int y, bool erase=false)
+        {
+        if(outOfMap(x,y)) return false;
+        
+        if(erase) map->at(x)[y] = 2;
+
+        return (map->at(x)[y] == RESOURCE || erase);
+        };
 
 void London::Graphics::LondonObject::randomWalkBernoulli()
     {
@@ -247,6 +293,14 @@ void London::Graphics::LondonObject::randomWalkBernoulli()
     tx = std::max(0, std::min(x+d*upOrDown, (int)map->size()-1));
     ty = std::max(0, std::min(y+d*upOrDown, ((int)map->at(tx).size()-1)));
     destination(tx, ty);
+    };
+
+void London::Graphics::LondonObject::setNeighbourhood(int view)
+    {
+    Pos p(x,y);
+    std::map<Pos, std::vector<Node>>::iterator occupiedIt = lController.neighbours.find(p);
+    if (occupiedIt != lController.neighbours.end())
+        this->neighbours = lController.neighbours.find(p)->second;
     };
 
 /* **************************************** */
@@ -297,14 +351,25 @@ void London::Graphics::repaint(HWND hwnd, std::vector<LondonObject*> &llObjects)
     //
     SetBkMode(hdc, TRANSPARENT);
 
-    for(int i = 0; i < llObjects.size(); i++) llObjects[i]->cpaint(hdc, rcWindow);
-
-    // Draw MAP
-    HFONT hFont= (HFONT) CreateFont (12, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, 
+     // Draw MAP
+    HFONT hFont= (HFONT) CreateFont (FONT_SIZE, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, 
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
         DEFAULT_PITCH | FF_SWISS, TEXT("Arial"));
     SelectObject(hdc,hFont);
-        
+
+    // Draw Gameboard
+    for(int x =  0; x < London::Graphics::lController.map.size(); x++)
+        {
+        for(int y = 0; y < London::Graphics::lController.map.at(x).size(); y++)
+            {
+            for(int j = 0; j < London::Graphics::lController.notTraversable.size(); j++)
+                if(London::Graphics::lController.notTraversable[j] == London::Graphics::lController.map.at(x)[y])
+                    TextOut(hdc, x*STEP, y*STEP, (std::string("o")).c_str(), (std::string("o")).length());
+            }
+        }
+
+    for(int i = 0; i < llObjects.size(); i++) llObjects[i]->cpaint(hdc, rcWindow);
+    
     //
     // Blt the changes to the screen DC.
     //

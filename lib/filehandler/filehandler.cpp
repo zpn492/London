@@ -221,10 +221,10 @@ void filehandler::histogram(const char *filename, std::vector<std::string> label
 
 /* Run a function with a series of input
  * For each result, store x values in a historgram or  */
-void filehandler::linechart(const char *filename, std::vector<std::string> labels, std::vector<double> dataset)
+void filehandler::linechart(const char *filename, std::vector<std::string> labels, std::vector<double> dataset, std::string chartname)
     {
-    std::string tmp = "var ctx = document.getElementById(\"myChart\").getContext('2d');";
-    tmp += "var myChart = new Chart(ctx, {type: 'line', data: {";
+    std::string tmp = "var ctx = document.getElementById(\"" + chartname + "\").getContext('2d');";
+    tmp += "var" + chartname + " = new Chart(ctx, {type: 'line', data: {";
 
     tmp += "labels: [";
     for(int i = 0; i < labels.size()-1; i++)
@@ -233,7 +233,7 @@ void filehandler::linechart(const char *filename, std::vector<std::string> label
         }
     tmp += "\""; tmp += labels[labels.size()-1]; tmp += "\"";
     tmp += "],";
-    tmp += "datasets: [{label: 'Some label', pointColor: 'rgba(220,220,220,1', pointStrokeColor: '#fff', ";
+    tmp += "datasets: [{label: '" + chartname +"', pointColor: 'rgba(220,220,220,1', pointStrokeColor: '#fff', ";
     tmp += " data: [";
     for(int j = 0; j < dataset.size()-1; j++)
         {

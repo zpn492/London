@@ -14,6 +14,7 @@ public:
     bool traversable;
     Node(int EDGE, int X, int Y);
     Node() {};
+    ~Node() {};
     std::vector<Node*> neighbours;
     int estimatedCost;
     int edge;
@@ -105,5 +106,7 @@ public:
      * @return vector[cols][rows]
      */
     std::vector<std::vector<int> > generateMap(int cols, int rows, int values=6);
+
+    std::vector<Node> getNeighbourhood(int x, int y, int maxX, int maxY, int viewzone);
     };
 #endif

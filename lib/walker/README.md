@@ -26,3 +26,8 @@ Find a path:
 * Foreach step in direction d, set x += 1*d; y+=1*d; & add pos(x, y) to path
 * return path; // Ex. (0,0), (1, 0), (1,1) etc.;
 ```
+<br /> <br />
+# Gauss
+* Walker w(64,48);
+* std::vector<std::vector<double> > gg(w.generateGauss(4,2));
+* Gauss g(gg, 10, 1,1);

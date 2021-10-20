@@ -7,3 +7,11 @@ Is a series of small programs in which i will learn to build & structure c++ pro
 > https://github.com/facebook/folly/ <br />
 > http://www.cplusplus.com/ <br />
 > https://www.programming-techniques.com/ <br />
+
+## TODO
+> Enlarge game environment
+> Implement other nations
+> Game statics should be xml, xml reader
+> Elements which is larger than one tile
+> Fix bug related to performance
+> Fix Memory leak

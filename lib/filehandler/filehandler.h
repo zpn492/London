@@ -65,7 +65,7 @@ namespace filehandler
      * labels: [keys[0]->key, .., keys[n]->key] 
      * data: [keys[0]->occurrences, .., keys[n]->occurrences]
      */
-    extern void linechart(const char *filename, std::vector<std::string> labels, std::vector<double> dataset);
+    extern void linechart(const char *filename, std::vector<std::string> labels, std::vector<double> dataset, std::string chartname="myChart");
 	
     };
 #endif

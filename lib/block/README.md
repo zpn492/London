@@ -48,3 +48,6 @@ randomWalk()                         // set path = w->randomWalk()
 > Example
 I tryed to implement some child classes of LondonObject. The result can be seen in the folder basecamp.
 
+# Links
+> windows.h
+> libgdi32.a
