@@ -248,17 +248,6 @@ namespace London
             bool grindResource(int x, int y, bool erase);
 
             /**
-             * Random walk with Bernoulli.
-             *
-             * This method fills path[].
-             * 
-             * Using time as seed, choose,
-             * direction, dx & dy. 
-             *
-             * Calculate full path with
-             * Bellman-Ford and his
-             * shortest_path(x, y, dx, dy).
-             *
              * https://www.encyclopediaofmath.org/index.php/Bernoulli_random_walk
              */
             void randomWalkBernoulli();
@@ -280,6 +269,13 @@ namespace London
          * https://msdn.microsoft.com/en-us/library/ms969905
          */
         void repaint(HWND hwnd, std::vector<LondonObject*> &llObjects);
+
+        /**
+         *
+         * Execute each object-turn in its own thread
+         */
+        void startTurn(std::vector<LondonObject*> &llObjects, int ID);
+        std::thread spawnThread(int ID);
 
         /**
          * This function calls turn on all elements,

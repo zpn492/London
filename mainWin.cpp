@@ -26,8 +26,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Market wool(32,16,32,16, "wool");
 
 	London::Graphics::lController.lObjects.push_back(&worker);
-	London::Graphics::lController.lObjects.push_back(&iron);
-	London::Graphics::lController.lObjects.push_back(&wool);
+	//London::Graphics::lController.lObjects.push_back(&iron);
+	//London::Graphics::lController.lObjects.push_back(&wool);
 
 	/* zero out the struct and set the stuff we want to modify */
 	memset(&wc,0,sizeof(wc));

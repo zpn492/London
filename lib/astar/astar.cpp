@@ -124,6 +124,8 @@ std::vector<Node> Astar::shortest_path(int fromX, int fromY, int toX, int toY,
         
         /* add node to the final path */
         finalPath.push_back(n);
+        
+        if(n.connectionX == toX && n.connectionY == toY) break;
         }
 
     if(debug)
@@ -134,10 +136,10 @@ std::vector<Node> Astar::shortest_path(int fromX, int fromY, int toX, int toY,
         for(int i = 0; i < finalPath.size(); i++)
             {
             std::cout << "(" << finalPath[i].x << ", " << finalPath[i].y << ") -> ";
-            std::cout << "Initial cost: " << path[i].edge << ", Connection cost: ";
-            std::cout << path[i].estimatedCost << ", Neigbours: ";
-            for(int j = 0; j < path[i].neighbours.size(); j++)
-                std::cout << path[i].neighbours[j]->edge << ", ";
+            //std::cout << "Initial cost: " << path[i].edge << ", Connection cost: ";
+            //std::cout << path[i].estimatedCost << ", Neigbours: ";
+            //for(int j = 0; j < path[i].neighbours.size(); j++)
+            //    std::cout << path[i].neighbours[j]->edge << ", ";
             std::cout << "" << std::endl;
             }
         }

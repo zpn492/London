@@ -33,6 +33,9 @@ London::Graphics::LondonController::LondonController()
     const char* filename = "city_160.png";
     seed = w->seed(filename);
 
+    // Set values which is not traversable
+    notTraversable.push_back(3);
+
     // Generate map
     map = astar.generateMap(64, 48); 
 
@@ -41,9 +44,6 @@ London::Graphics::LondonController::LondonController()
     map.at(10)[15] = 7; map.at(10)[10] = 7; map.at(30)[20] = 7;
     map.at(30)[30] = 7; map.at(60)[40] = 7; map.at(25)[45] = 7;
     
-    // Set values which is not traversable
-    notTraversable.push_back(3);
-
     // Find neighbourghood for each position
     for(int x =  0; x < map.size(); x++)
         {
@@ -316,7 +316,7 @@ void London::Graphics::repaint(HWND hwnd, std::vector<LondonObject*> &llObjects)
     HBRUSH hbrBkGnd;
     HFONT hfntOld;
     hdc = BeginPaint(hwnd, &ps);
-
+    
     //
     // Get the size of the client rectangle.
     //
@@ -395,6 +395,9 @@ void London::Graphics::repaint(HWND hwnd, std::vector<LondonObject*> &llObjects)
 
 void London::Graphics::turn(std::vector<LondonObject*> &llObjects)
     {
-    for(int i = 0; i < llObjects.size(); i++) llObjects[i]->turn();
+    for(int i = 0; i < llObjects.size(); i++) 
+        {
+        llObjects[i]->turn();       
+        };
     turner++;
     };

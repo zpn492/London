@@ -5,7 +5,7 @@ namespace London
     {
     namespace Graphics
     {
-    #define STEP 10
+    #define STEP 5
     #define MOVEMENT 5
     #define VIEW_ZONE 4
     #define RESOURCE 7

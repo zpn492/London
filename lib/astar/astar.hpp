@@ -47,13 +47,6 @@ class Astar
     {
     std::vector<Node> nodes;
 
-    std::vector<int> notTraversable;
-
-    /* Find all neighbours to a node. 
-     * foreach match update n.neighbours, with a reference
-     */
-    void find_neighbours(const std::vector<std::vector<int> > &map, Node &n);
-
     /* Initialize all nodes within the map
      * find neighbours foreach node,
      * Where a neighbour is a node within the same square
@@ -63,6 +56,11 @@ class Astar
      * N N N
      */
     void init(const std::vector<std::vector<int> > &map);
+
+    /* Find all neighbours to a node. 
+     * foreach match update n.neighbours, with a reference
+     */
+    void find_neighbours(const std::vector<std::vector<int> > &map, Node &n);
 
     /* This method is used to calculate the cost,
      * of moving to Node n.
@@ -76,8 +74,9 @@ class Astar
      * If no Node was found, the method will return -1 */
     int find_node_id(int x, int y);
 
-
-protected:
+public:
+    std::vector<int> notTraversable;
+    
     /*
      * Bellman-Ford(source, vertices/edge):
      * Initialize all elements to infinity = init(map)
@@ -89,7 +88,7 @@ protected:
      */
     std::vector<Node> find_path(int x, int y, const std::vector<std::vector<int> > &map);
 
-public:
+
     /*
      * Main method in Astar, returns a list of nodes, which contains initial node, end node, 
      * and alle nodes in between which results in the fastest path between initial and end.

@@ -47,10 +47,6 @@ bool Worker::work()
     {
     setNeighbourhood(VIEW_ZONE);   
 
-    std::cout << "this.x, this.y: " << this->x << ", " << this->y << std::endl;
-    for(int i = 0; i < this->neighbours.size(); i++)
-        std::cout << "x: " << neighbours[i].x << ", y: " << neighbours[i].y << std::endl;
-
     return resourceFieldSearchExtractReturn();
     };
 
