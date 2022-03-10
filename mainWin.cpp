@@ -21,11 +21,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	/* Do your magic here */
 	/* metode til at loade en xml */
 	Worker worker(32,16,32,16);
-
-	Market iron(32,16,32,16, "iron");
-	Market wool(32,16,32,16, "wool");
+	Worker worker1(32,16,32,16);
+	Worker worker2(32,16,32,16);
+	Worker worker3(32,16,32,16);
+	//Market iron(32,16,32,16, "iron");
+	//Market wool(32,16,32,16, "wool");
 
 	London::Graphics::lController.lObjects.push_back(&worker);
+	London::Graphics::lController.lObjects.push_back(&worker1);
+	London::Graphics::lController.lObjects.push_back(&worker2);
+	London::Graphics::lController.lObjects.push_back(&worker3);
 	//London::Graphics::lController.lObjects.push_back(&iron);
 	//London::Graphics::lController.lObjects.push_back(&wool);
 
