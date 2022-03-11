@@ -8,6 +8,15 @@
 
 #include "lib/market/market.hpp"
 
+/* OpenSSL example
+   https://wiki.openssl.org/index.php/Simple_TLS_Server
+ */
+ #include "TCPSSLServer.h"
+ #define PRINT_LOG [](const std::string& strLogMsg) { std::cout << strLogMsg << std::endl;  }
+extern std::string CERT_AUTH_FILE;
+extern std::string SSL_CERT_FILE;
+extern std::string SSL_KEY_FILE;
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
 /* The 'main' function of Win32 GUI programs: this is where execution starts */
@@ -21,16 +30,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	/* Do your magic here */
 	/* metode til at loade en xml */
 	Worker worker(32,16,32,16);
-	Worker worker1(32,16,32,16);
-	Worker worker2(32,16,32,16);
-	Worker worker3(32,16,32,16);
+
+	/*
+	const size_t tenMeg = 10*1024*1024;
+    std::vector<char> TenMbData(tenMeg);
+    std::vector<char> RcvBuffer(tenMeg);
+    std::generate (TenMbData.begin(), TenMbData.end(), []{ return (std::rand() % 256); });
+	CTCPSSLServer m_pSSLTCPServer(PRINT_LOG, "7879");
+	m_pSSLTCPServer->SetSSLCertFile(SSL_CERT_FILE);
+	m_pSSLTCPServer->SetSSLKeyFile(SSL_KEY_FILE);
+	ASecureSocket::SSLSocket ConnectedClient;
+	m_pSSLTCPServer->Listen(ConnectedClient);
+	m_pSSLTCPServer->Send(ConnectedClient, TenMbData);
+	m_pSSLTCPServer->Receive(ConnectedClient, RcvBuffer.data(), tenMeg);
+	*/
+
 	//Market iron(32,16,32,16, "iron");
 	//Market wool(32,16,32,16, "wool");
 
 	London::Graphics::lController.lObjects.push_back(&worker);
-	London::Graphics::lController.lObjects.push_back(&worker1);
-	London::Graphics::lController.lObjects.push_back(&worker2);
-	London::Graphics::lController.lObjects.push_back(&worker3);
 	//London::Graphics::lController.lObjects.push_back(&iron);
 	//London::Graphics::lController.lObjects.push_back(&wool);
 

@@ -39,7 +39,7 @@ void london(int decksize)
 
 void requestAdress()
     {
-    Sock web(443, "147.29.175.24", 1);				// Initialize Web object & Connect to a remote server
+    Sock web(443, "147.29.175.24", 1);			// Initialize Web object & Connect to a remote server
     const int maxbuffer = 1024;					// Define max buffer size
     char buffer1[maxbuffer];					// Intialize a buffer
     web.tsend("GET /rest/soeg/R%C3%B8nneholmsvej%202610 HTTP/1.1\n\n");	// Send a GET request
