@@ -19,7 +19,7 @@ HTTPDecodeRequest::HTTPDecodeRequest(std::string request, HTTPResponse &r, Logge
     else
         httpmethod = r.http200;
 
-    if(!filehandler::exists_file(filepath.c_str(), log)) 
+    if(!filehandler::exists_file(filepath.c_str())) 
         {
         filepath = r.filenotfoundpath;
         filepath = r.folderpath + filepath;
@@ -28,7 +28,7 @@ HTTPDecodeRequest::HTTPDecodeRequest(std::string request, HTTPResponse &r, Logge
         }     
 
     filetype = filehandler::split_string(filepath, '.');
-    contentsize = filehandler::file_size(filepath.c_str(), log);
+    contentsize = filehandler::file_size(filepath.c_str());
     partialsize = contentsize+1;
 
     if(range)
@@ -36,11 +36,11 @@ HTTPDecodeRequest::HTTPDecodeRequest(std::string request, HTTPResponse &r, Logge
         if(to == 0) to = from + std::min(DEFAULTCHUNKSIZE, contentsize);
         to = 0 + std::min((int)to, contentsize);
         contentsize = to - from + 1;
-        content = filehandler::get_file_chunk(filepath.c_str(), from, to, log);
+        content = filehandler::get_file_chunk(filepath.c_str(), from, to);
         }       
     else
         {
-        content = filehandler::get_file_contents(filepath.c_str(), log);
+        content = filehandler::get_file_contents(filepath.c_str());
         } 
     };
 
