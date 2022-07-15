@@ -198,6 +198,7 @@ void Basecamp::cpaint(HDC &hdc, RECT &rcWindow)
     std::string ss = filehandler::int_to_string((int)villages.size()); ss = "Villagers: " + ss;
     TextOut(hdc, 1*STEP, 1*STEP, ss.c_str(), ss.length());
 
+
     //Draw resource count
     ss = filehandler::int_to_string((int)resources); ss = "Resources: " + ss;
     TextOut(hdc, 1*STEP, 3*STEP, ss.c_str(), ss.length());
@@ -219,7 +220,11 @@ void Basecamp::cpaint(HDC &hdc, RECT &rcWindow)
         TextOut(hdc, i*STEP, j*STEP, (std::string("o")).c_str(), (std::string("o")).length());
     
     // Draw villages
-    for(int i = 0; i < villages.size(); i++) villages[i].cpaint(hdc, rcWindow);
+    for(int i = 0; i < villages.size(); i++) 
+        {
+        villages[i].cpaint(hdc, rcWindow);
+        }
+
     };
 
 void Basecamp::turn()

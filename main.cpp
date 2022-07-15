@@ -81,7 +81,7 @@ void printRandomWalk(int size)
 
 int main(int argc, char *argv[])
     {
-    printf("Hello World!\n");
-    printRandomWalk(5);
+    printf("Internet engineering task force!\n");
+    
     return 0;
     };
