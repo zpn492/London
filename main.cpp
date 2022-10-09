@@ -1,6 +1,8 @@
 /* Handles all standard includes */
 #include "SimpleJust.h"
 
+#include "ext/sqlite/sqlite3.h"
+
 /* filehandler */
 #include "lib/filehandler/filehandler.h"
 

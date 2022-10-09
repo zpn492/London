@@ -19,29 +19,39 @@ HTTPDecodeRequest::HTTPDecodeRequest(std::string request, HTTPResponse &r, Logge
     else
         httpmethod = r.http200;
 
+    // If the file does not exist
+    // or an object is called
+    // 
     if(!filehandler::exists_file(filepath.c_str())) 
         {
+        // An object is requested
+        
+
+        // No answer available
         filepath = r.filenotfoundpath;
         filepath = r.folderpath + filepath;
         httpmethod = r.http404;
         range = false;
         }     
-
-    filetype = filehandler::split_string(filepath, '.');
-    contentsize = filehandler::file_size(filepath.c_str());
-    partialsize = contentsize+1;
-
-    if(range)
-        {
-        if(to == 0) to = from + std::min(DEFAULTCHUNKSIZE, contentsize);
-        to = 0 + std::min((int)to, contentsize);
-        contentsize = to - from + 1;
-        content = filehandler::get_file_chunk(filepath.c_str(), from, to);
-        }       
+    // A file was requested
     else
         {
-        content = filehandler::get_file_contents(filepath.c_str());
-        } 
+        filetype = filehandler::split_string(filepath, '.');
+        contentsize = filehandler::file_size(filepath.c_str());
+        partialsize = contentsize+1;
+
+        if(range)
+            {
+            if(to == 0) to = from + std::min(DEFAULTCHUNKSIZE, contentsize);
+            to = 0 + std::min((int)to, contentsize);
+            contentsize = to - from + 1;
+            content = filehandler::get_file_chunk(filepath.c_str(), from, to);
+            }       
+        else
+            {
+            content = filehandler::get_file_contents(filepath.c_str());
+            } 
+        }
     };
 
 void HTTPDecodeRequest::tsend(Sock &s, HTTPResponse &r)

@@ -20,7 +20,7 @@ ECHO Compile main
 
 :: Make executeable
 ECHO Create executeable
-"..\..\Dev-Cpp\MinGW64\bin\g++.exe" main.o %olib% -o "bin\SomeProg.exe" -std=c++11 -m32 -I"..\..\Dev-Cpp\MinGW64\include" -I"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\Dev-Cpp\lib\libwsock32.a" -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 "..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib\libbgi.a" 
+"..\..\Dev-Cpp\MinGW64\bin\g++.exe" main.o "ext\sqlite\sqlite3.o" %olib% -o "bin\SomeProg.exe" -std=c++11 -m32 -I"..\..\Dev-Cpp\MinGW64\include" -I"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\Dev-Cpp\lib\libwsock32.a" -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 "..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib\libbgi.a" 
 ECHO Ready
 GOTO end
 
@@ -34,5 +34,14 @@ GOTO end
 :single
 echo Compile %2
 "..\..\Dev-Cpp\MinGW64\bin\g++.exe" -c "lib\%2\%2.cpp" -fpermissive -o "lib\%2\%2.o" -std=c++11 -m32 -I"..\..\Dev-Cpp\MinGW64\include" -I"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" 
+
+echo Compile %2_unittest
+"..\..\Dev-Cpp\MinGW64\bin\g++.exe" -c "lib\%2\%2_unittest.cpp" -fpermissive -o "lib\%2\%2_unittest.o" -std=c++11 -m32 -I"..\..\Dev-Cpp\MinGW64\include" -I"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" 
+
+echo Create %2_unittest
+"..\..\Dev-Cpp\MinGW64\bin\g++.exe" "lib\%2\%2_unittest.o" "ext\sqlite\sqlite3.o" %olib% -o "lib\%2\%2_unittest.exe" -std=c++11 -m32 -I"..\..\Dev-Cpp\MinGW64\include" -I"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include" -I"..\..\Dev-Cpp\MinGW64\lib\gcc\x86_64-w64-mingw32\4.9.2\include\C++" -L"..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib32" -static-libgcc -m32 "..\..\Dev-Cpp\lib\libwsock32.a" -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 "..\..\Dev-Cpp\MinGW64\x86_64-w64-mingw32\lib\libbgi.a"
+
+echo Run %2_unittest
+"lib\%2\%2_unittest.exe"
 
 :end
